@@ -60,7 +60,9 @@ client.on("message", msg => {
             let line = lines[i];
             ctx.fillText(line, ML, i*LH+MT);
         }
-        msg.reply("",{files: [canvas.toBuffer('image/png', { compressionLevel: 3, filters: canvas.PNG_FILTER_NONE })]});
+        //new Discord.Message(client, {files: [canvas.toBuffer('image/png', { compressionLevel: 3, filters: canvas.PNG_FILTER_NONE })]}, msg.channel);
+        //msg.reply("",{files: [canvas.toBuffer('image/png', { compressionLevel: 3, filters: canvas.PNG_FILTER_NONE })]});
+        msg.channel.send(msg.author.username+" said:",{files: [canvas.toBuffer('image/png', { compressionLevel: 3, filters: canvas.PNG_FILTER_NONE })]});
         /*
         .Attachments.Add(new Attachment(){
             ContentUrl = canvas.toDataURL();
