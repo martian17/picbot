@@ -45,6 +45,12 @@ client.on("message", msg => {
     let str = msg.content;
     if (str.slice(0,2) === "//") {
         str = str.slice(2);
+        console.log(`author: ${msg.author.username}\n`+
+                    `channel: ${msg.channel.name}\n`+
+                    `guild: ${msg.channel.guild.name}\n`+
+                    `time: ${new Date()}\n`+
+                    `contents: ${str}`);
+        console.log("");
         //drawing the message content to canvas
         let lines = getLines(str,IW);
         let width = OW;
@@ -68,6 +74,7 @@ client.on("message", msg => {
             ContentUrl = canvas.toDataURL();
         });
         */
+        //msg.delete();
     }
 });
 
