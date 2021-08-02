@@ -5,31 +5,32 @@ require('dotenv').config();
 //canvas
 const { createCanvas, loadImage } = require('canvas');
 
-let OW = 700;//outer width
-let ML = 10;//margin left
-let IW = 600;//inner width
-let LH = 30;//line height
+let OW = 400;//outer width
+let ML = 0;//margin left
+let IW = 400;//inner width
+let LH = 19;//line height
 let MT = 5;//margin top
 let MB = 5;
-let FONT = "30px Impact";
+let FONT = "14px Whitney";
 
 let Xcanvas = createCanvas(OW,200);
-let Xctx = canvas.getContext("2d");
+let Xctx = Xcanvas.getContext("2d");
 Xctx.font = FONT;
 let getLines = function(str,w){
     let result = [];
     let breakPoint = 0;
     for(let i = 0; i < str.length; i++){
         if(str[i] === "\n"){
-            result.push(str.slice(breakPoint,i-1));
+            result.push(str.slice(breakPoint,i));
             breakPoint = i+1;
         }
         let substr = str.slice(breakPoint,i+1);
         if(Xctx.measureText(substr).width > w){
             result.push(str.slice(breakPoint,i));
-            breakPoint = i+1;
+            breakPoint = i;
         }
     }
+    result.push(str.slice(breakPoint,str.length));
     return result;
 };
 
@@ -51,14 +52,20 @@ client.on("message", msg => {
         let canvas = createCanvas(width,height);
         let ctx = canvas.getContext("2d");
         ctx.font = FONT;
+        ctx.textBaseline = "hanging";
         ctx.fillStyle = "#36393f";
         ctx.fillRect(0,0,OW,200);
         ctx.fillStyle = "#dcddde";
         for(let i = 0; i < lines.length; i++){
             let line = lines[i];
-            canvas.fillText(line, LM, i*LH+MT);
+            ctx.fillText(line, ML, i*LH+MT);
         }
-        msg.reply(canvas.toDataURL());
+        msg.reply("",{files: [canvas.toBuffer('image/png', { compressionLevel: 3, filters: canvas.PNG_FILTER_NONE })]});
+        /*
+        .Attachments.Add(new Attachment(){
+            ContentUrl = canvas.toDataURL();
+        });
+        */
     }
 });
 
@@ -67,9 +74,11 @@ client.login(process.env.TOKEN);
 
 
 
-
+//other example
+/*
 
 const out = fs.createWriteStream(__dirname + '/test.png')
 const stream = canvas.createPNGStream()
 stream.pipe(out)
 out.on('finish', () =>  console.log('The PNG file was created.'))
+*/
